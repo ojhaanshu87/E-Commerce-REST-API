@@ -1,11 +1,26 @@
-from flask import Flask
+from flask import Flask, request, jsonify
+from passlib.hash import pbkdf2_sha256
+from mongoengine import connect
+from models import Users
 
 #instance of app
 app = Flask(__name__)
 
-@app.route('/')
-def render_index():
-	return render_template('index.html')
+connect(
+    db='test'
+)
+
+@app.route('/register', methods=['POST'])
+def register_user():
+    user_data = request.get_json(force=True)
+    username = user_data['username']
+    email = user_data['email']
+
+    password = pbkdf2_sha256.hash(user_data['password'])
+    user = Users(username=username, email=email, password=password)
+    user.save()
+
+    return jsonify({'status': True, 'message': "successfully register"})
 
 
 
