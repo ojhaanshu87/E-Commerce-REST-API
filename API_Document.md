@@ -6,11 +6,11 @@
 
 **Request body** (JSON) <br />
 { <br />
-  "username" : <string>, <br />
-  "email" : <string>, <br />
-  "is_admin" : <boolean>, <br />
-  "is_seller" : <boolean>, <br />
-  "password" : <string> <br />
+  "username" : "string", <br />
+  "email" : "string", <br />
+  "is_admin" : "boolean", <br />
+  "is_seller" : "boolean", <br />
+  "password" :"string" <br />
 } <br />
  
 **Sample request** <br />
@@ -29,8 +29,8 @@
 
 **Request body** <br />
 { <br />
-  "username" : <string>, <br />
-  "password" : <string> <br />
+  "username" : "string", <br />
+  "password" : "string" <br />
 } <br />
 
 **Sample request** <br />
@@ -51,10 +51,10 @@
 
 **Request body** <br />
 { <br />
-  "title" : <string>, <br />
-  "description" :<string>, <br />
-  "price" : <float>, <br />
-  "user_id" <string>, <br />
+  "title" : "string", <br />
+  "description" :"string", <br />
+  "price" : "float", <br />
+  "user_id" "string", <br />
 } <br />
 
 
@@ -95,7 +95,7 @@ SELLER <br />
 
 **Request Body** <br />
 { <br />
-  "prod_id" :<string> <br />
+  "prod_id" :"string" <br />
 }<br />
 
 **Response**
@@ -154,10 +154,10 @@ prod_id  <br />
 
 **Request body** <br />
 { <br />
-  "title" : <string>, <br />
-  "description" :<string>, <br />
-  "price" : <float>, <br />
-  "user_id" <string>, (which shoud be logged in as creation owner of seller or Admin only )<br />
+  "title" : "string", <br />
+  "description" : "string", <br />
+  "price" : "float", <br />
+  "user_id" : "string", (which shoud be logged in as creation owner of seller or Admin only )<br />
 }  <br />
 
 **Sample Request if User / invalid seller logged in** <br />
@@ -194,8 +194,8 @@ prod_id  <br />
 
 **Request body** <br />
 { <br />
-  "product_id" : <string>, <br />
-  "user_id" :<string>, <br />
+  "product_id" : "string", <br />
+  "user_id" : "string", <br />
 }  <br />
 
 **Sample Request**
