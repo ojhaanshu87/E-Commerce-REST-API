@@ -2,7 +2,7 @@
 
 **METHOD** : POST <br />
 
-[a link](localhost:5000/register) <br />
+localhost:5000/register <br />
 
 **Request body** <br />
  username <br />

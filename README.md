@@ -27,6 +27,6 @@ E) For remove (DELETE) items, only Admin or the seller who add the item previous
 
 ###TODO <br />
 A) Search by regular expression
-B) Implement (L)ongest (C)ommon (S)equence based search engine *[like here as in C#](https://github.com/ojhaanshu87/LCS-Problem-With-Percentage-Matching)*
+B) Implement (L)ongest (C)ommon (S)equence based search engine *[like here as in C#](https://github.com/ojhaanshu87/LCS-Problem-With-Percentage-Matching)* <br />
 C) cart add option
 
