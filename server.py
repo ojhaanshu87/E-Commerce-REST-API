@@ -4,14 +4,18 @@ from mongoengine import connect
 from models import Users, Products
 import uuid
 import json
+from tests import TestFlaskRestApi
 
 #instance of app
 app = Flask(__name__)
 app.secret_key = str(uuid.uuid4())
+
+#Connect to mongodb 
 connect(
     db='test'
 )
 
+#register the user
 @app.route('/register', methods=['POST'])
 def register_user():
     user_data = request.get_json(force=True)
@@ -30,6 +34,7 @@ def register_user():
 
     return jsonify({'status': True, 'message': "successfully register"})
 
+#login user
 @app.route('/login', methods=['POST'])
 def login_user():
     credentials = request.get_json(force=True)
@@ -47,19 +52,50 @@ def login_user():
 
     return jsonify({'status': valid_credentials})
 
+#logout user
 @app.route('/logout')
 def logout_user():
     session.clear()
     return jsonify({'status': 'username' not in session})
 
-@app.route('/searchProduct')
+#READ The product by ID for all
+@app.route('/searchProductById')
 def search_items():
     prod_id =request.args.get('prod_id')
     products = json.loads(Products.objects(product_id=prod_id).to_json())
-    return jsonify({'status': True, 'products':products})
+    if len(products):
 
+        return jsonify({'status': True, 'products':products})
+    else:
+        return jsonify({'status':False, 'message':'The Item is not available.'})
+
+#READ The product by tile or description or price for all
+@app.route('/searchProductByParameters')
+def search_items_by_parameters():
+    search_filter = {}
+
+    if 'title' in request.args:
+        search_filter['title'] = request.args.get('title')
+
+    if 'description' in request.args:
+        search_filter['description'] = request.args.get('description')
+
+    if 'price' in request.args:
+        search_filter['price'] = request.args.get('price')
+
+    products = json.loads(Products.objects(__raw__=search_filter).to_json())
+    if len(products):
+        return jsonify({'status': True, 'products':products})
+    else:
+        return jsonify({'status':False, 'message':'The Item is not available.'})
+
+
+#CREATE The Product only if Seller or Admin in DataBase
 @app.route('/addProduct', methods=['POST'])
 def add_product():
+    if 'username' not in session:
+        return jsonify({'status':False, 'message':'Login Required'})
+
     prod_data = request.get_json(force=True)
 
     user = Users.objects(user_id=prod_data['user_id']).first()
@@ -74,55 +110,74 @@ def add_product():
         product = Products(product_id=product_id, title=title, description=description, price=price,
          seller_id=seller_id)
         product.save()
-        return jsonify({'status':True})
+        return jsonify({'status':True, 'message':'Item Added Successfully.'})
     else:
         return jsonify({'status':False, 'message':'Operation not permitted'})
 
-@app.route('/deleteProduct', methods=['DELETE'])
+
+#DELETE The product for Admin or the owner of CREATE product previously, not for other seller and user
 #Only Admin or product owner can delete the products
+@app.route('/deleteProduct', methods=['DELETE'])
 def delete_product():
+    if 'username' not in session:
+        return jsonify({'status':False, 'message':'Login Required'})
+
     prod_data = request.get_json(force=True)
     user = Users.objects(user_id=prod_data['user_id']).first()
+
     if not user.is_admin and not user.is_seller:
         return jsonify({'status':False, 'message': 'Opearation not permitted'})
     elif user.is_admin:
         product = Products.objects(product_id=prod_data['product_id']).first()
-        product.delete()
-        return jsonify({'status':True})
+        if product :   
+            product.delete()
+            return jsonify({'status':True, 'message':'Product Deleted'})
+        else:
+            return jsonify({'status':False, 'message':'No matching product found to delete'})
     elif user.is_seller:
         product = Products.objects(product_id=prod_data['product_id']).first()
-        if product.seller_id == prod_data['user_id']:
-            product.delete()
-            return jsonify({'status':True})
+        if product :
+            if product.seller_id == prod_data['user_id']:
+                product.delete()
+                return jsonify({'status':True})
+            else:
+                return jsonify({'status':False, 'message': 'Not Permitted because you did not add the product'})
         else:
-            return jsonify({'status':False, 'message': 'Not Permitted because you did not add the product'})
+            return jsonify({'status':False, 'message':'No matching product found to delete'})
 
+#UPDATE product only for seller or admin, not for without product seller owner
 @app.route('/updateProduct', methods=['POST'])
 def update_product():
+    if 'username' not in session:
+        return jsonify({'status':False, 'message':'Login Required'})
+
     prod_data = request.get_json(force=True)
-    title = prod_data['title']
-    description = prod_data['description']
-    price = prod_data['price']
     user = Users.objects(user_id=prod_data['user_id']).first()
     if not user.is_admin and not user.is_seller:
         return jsonify({'status':False, 'message': 'Opearation not permitted'})
     elif user.is_admin:
         product = Products.objects(product_id=prod_data['product_id']).first()
-        product.title = title
-        product.description = description
-        product.price = price
-        product.save()
-        return jsonify({'status':True})
+        if product:
+            product.title = prod_data['title']
+            product.description = prod_data['description']
+            product.price = prod_data['price']
+            product.save()
+            return jsonify({'status':True, 'message':'Item updated by Admin'})
+        else: 
+            return jsonify({'status':False, 'message':'No matching product found to update'})
     elif user.is_seller:
         product = Products.objects(product_id=prod_data['product_id']).first()
-        if product.seller_id == prod_data['user_id']:
-            product.title = title
-            product.description = description
-            product.price = price
-            product.save()
-            return jsonify({'status':True})
+        if product:
+            if product.seller_id == prod_data['user_id']:
+                product.title = prod_data['title']
+                product.description = prod_data['description']
+                product.price = prod_data['price']
+                product.save()
+                return jsonify({'status':True, 'message':'Item updated by Seller'})
+            else:
+                return jsonify({'status':False, 'message': 'Not Permitted because you did not add the product'})
         else:
-            return jsonify({'status':False, 'message': 'Not Permitted because you did not add the product'})
+            return jsonify({'status':False, 'message':'No matching product found to Update'})
 
 if __name__ == "__main__":
-	app.run(host = "0.0.0.0", debug = True)
+    app.run(host ="0.0.0.0", debug = True)
