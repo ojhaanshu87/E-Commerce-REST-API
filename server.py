@@ -4,7 +4,6 @@ from mongoengine import connect
 from models import Users, Products
 import uuid
 import json
-from tests import TestFlaskRestApi
 
 #instance of app
 app = Flask(__name__)
@@ -139,7 +138,7 @@ def delete_product():
         if product :
             if product.seller_id == prod_data['user_id']:
                 product.delete()
-                return jsonify({'status':True})
+                return jsonify({'status':True, 'message':'Product Deleted'})
             else:
                 return jsonify({'status':False, 'message': 'Not Permitted because you did not add the product'})
         else:

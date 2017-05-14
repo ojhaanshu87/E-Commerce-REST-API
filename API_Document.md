@@ -2,18 +2,19 @@
 
 **METHOD** : POST <br />
 
-localhost:5000/register <br />
+**END POINT** : localhost:5000/register <br />
 
-**Request body** <br />
- username <br />
- email <br />
- password <br />
- user_id <br />
- is_admin <br />
- is_seller <br />
+**Request body** (JSON) <br />
+{ <br />
+  "username" : <string>, <br />
+  "email" : <string>, <br />
+  "is_admin" : <boolean>, <br />
+  "is_seller" : <boolean>, <br />
+  "password" : <string> <br />
+} <br />
  
 **Sample request** <br />
-{"username":"anshu_seller", "email":"anshu_seller@gmail.com", "password":"asdfghjkl", "user_id":"3", "is_admin":false, "is_seller":true} <br />
+{"username":"anshu_seller", "email":"anshu_seller@gmail.com", "password":"asdfghjkl", "is_admin":false, "is_seller":true} <br />
 
 **Response Param** <br />
 { <br />
@@ -24,11 +25,13 @@ localhost:5000/register <br />
 
 **METHOD** : POST <br />
 
-localhost:5000/login <br />
+**END POINT** : localhost:5000/login <br />
 
 **Request body** <br />
-username <br />
-password <br />
+{ <br />
+  "username" : <string>, <br />
+  "password" : <string> <br />
+} <br />
 
 **Sample request** <br />
 {"username" : "anshu_user", "password" : "asdfghjkl" } <br />
@@ -44,13 +47,16 @@ password <br />
 
 **METHOD** : POST <br />
 
-localhost:5000/addProduct <br />
+**END POINT** : localhost:5000/addProduct <br />
 
 **Request body** <br />
-title <br />
-description <br />
-price <br />
-user_id <br />
+{ <br />
+  "title" : <string>, <br />
+  "description" :<string>, <br />
+  "price" : <float>, <br />
+  "user_id" <string>, <br />
+} <br />
+
 
 **IF USER** <br />
 
@@ -85,10 +91,12 @@ SELLER <br />
  
 **searchProductById** <br />
 
-localhost:5000/searchProductById?prod_id=fb98e6b4-b2cc-414b-92f5-9264ef0a14d4 <br />
+**END POINT** : localhost:5000/searchProductById?prod_id=fb98e6b4-b2cc-414b-92f5-9264ef0a14d4 <br />
 
 **Request Body** <br />
-prod_id <br />
+{ <br />
+  "prod_id" :<string> <br />
+}<br />
 
 **Response**
 { <br />
@@ -109,11 +117,11 @@ prod_id <br />
 
 **searchProductByParameters** <br />
 
-localhost:5000/searchProductByParameters?title=sports <br />
+**END POINT** : localhost:5000/searchProductByParameters?title=sports <br />
 OR <br />
-localhost:5000/searchProductByParameters?description=batting <br />
+**END POINT** : localhost:5000/searchProductByParameters?description=batting <br />
 OR <br />
-localhost:5000/searchProductByParameters?price=5000 <br />
+**END POINT** : localhost:5000/searchProductByParameters?price=5000 <br />
 
 **Request Body**<br />
 prod_id  <br />
@@ -140,15 +148,17 @@ prod_id  <br />
 
 **METHOD** : POST <br />
 
-localhost:5000/updateProduct <br />
+**END POINT** : localhost:5000/updateProduct <br />
 
 *IF USER:* <br />
 
 **Request body** <br />
-title <br />
-description <br />
-price <br />
-user_id (which shoud be logged in as creation owner of seller or Admin only ) <br />
+{ <br />
+  "title" : <string>, <br />
+  "description" :<string>, <br />
+  "price" : <float>, <br />
+  "user_id" <string>, (which shoud be logged in as creation owner of seller or Admin only )<br />
+}  <br />
 
 **Sample Request if User / invalid seller logged in** <br />
 {"title" : "sports1", "description" : "batting1", "price" : 6000, "user_id" : "f1b3dcb7-83a5-49a8-8d52-6dcf68fbfff5"} <br />
@@ -180,14 +190,20 @@ user_id (which shoud be logged in as creation owner of seller or Admin only ) <b
 
 **METHOD** : DELETE <br />
 
-localhost:5000/deleteProduct <br />
+**END POINT** : localhost:5000/deleteProduct <br />
+
+**Request body** <br />
+{ <br />
+  "product_id" : <string>, <br />
+  "user_id" :<string>, <br />
+}  <br />
 
 **Sample Request**
 {"product_id":"fb98e6b4-b2cc-414b-92f5-9264ef0a14d4", "user_id":"f1b3dcb7-83a5-49a8-8d52-6dcf68fbfff5"} <br />
 
 *IF USER:* <br />
 
-**Sammple Request**
+**Sample Request**
 {"product_id":"fb98e6b4-b2cc-414b-92f5-9264ef0a14d4", "user_id":"f1b3dcb7-83a5-49a8-8d52-6dcf68fbfff5"} <br />
 
 **response**
