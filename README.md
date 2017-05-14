@@ -9,6 +9,8 @@ This App is general (Create, Read, Update, Delete) REST-API. Each operation exce
 
 *FOR DETAILS (params) REFER [API DOCS](https://github.com/ojhaanshu87/E-Commerce-REST-API/blob/master/API_Document.md)* <br />
 
+*FOR all test cases REFER [Test Cases](https://github.com/ojhaanshu87/E-Commerce-REST-API/blob/master/tests.py)* <br />
+
 ### Mongo DB installation <br />
 sudo apt-get install mongodb <br />
 
