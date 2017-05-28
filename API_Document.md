@@ -158,10 +158,11 @@ prod_id  <br />
   "description" : "string", <br />
   "price" : "float", <br />
   "user_id" : "string", (which shoud be logged in as creation owner of seller or Admin only )<br />
+  "product_id" : "string" <br />
 }  <br />
 
 **Sample Request if User / invalid seller logged in** <br />
-{"title" : "sports1", "description" : "batting1", "price" : 6000, "user_id" : "f1b3dcb7-83a5-49a8-8d52-6dcf68fbfff5"} <br />
+{"title" : "sports1", "description" : "batting1", "price" : 6000, "user_id" : "f1b3dcb7-83a5-49a8-8d52-6dcf68fbfff5", "product_id": "aca41a59-718e-4fce-95f4-92aaf491700e"} <br />
 
 **response normal user** <br />
 { <br />
